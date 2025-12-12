@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+<body style="margin:0; padding:0; overflow:hidden;">
+<script>
+let tiles = [];
+let cols, rows;
+let size = 10;
+let speed = 0.05;
+let shapeType = 'triangles';
+let palette = ['#896C6C', '#E5BEB5', '#EEE6CA', '#F5FAE1', '#D0DDD0'];
+function setup() {
+createCanvas(windowWidth, windowHeight);
+createGrid();
+}
+function windowResized() {
+resizeCanvas(windowWidth, windowHeight);
+createGrid();
+}
+function createGrid() {
+cols = width / size;
+rows = height / size;
+tiles = [];
+for (let i = 0; i < cols; i++) {
+tiles[i] = [];
+for (let j = 0; j < rows; j++) {
+tiles[i][j] = new Tile(
+i, 
+j, 
+size, 
+floor(random(4)), 
+color(random(palette))
+      );
+    }
+  }
+}
+function draw() {
+background('#EEE6CA');
+// for speed
+let Time = frameCount * speed;
+for (let i = 0; i < cols; i++) {
+for (let j = 0; j < rows; j++) {
+tiles[i][j].update(Time);
+tiles[i][j].display();
+    }
+  }
+}
+function keyPressed() {
+// switch between triangle and circle shapes
+if (key === 't' || key === 'T') {
+if (shapeType === 'triangles') {
+shapeType = 'circles';
+    } else {
+shapeType = 'triangles';
+    }
+  }
+} 
+class Tile {
+constructor(gridX, gridY, size, type, c) {
+this.gridX = gridX;  
+this.gridY = gridY;  
+this.size = size;
+this.type = type;  //0-3 for triangles, 0-1 for circles
+this.c = c;          
+this.baseX = gridX * size;
+this.baseY = gridY * size;
+  }
+update(time) {
+this.x = this.baseX;
+this.y = this.baseY;
+// horizontal shift- rows
+let horizontalShift = 0;
+if (this.gridY % 2 === 0) {
+horizontalShift = sin(time) * this.size;
+    } else {
+horizontalShift = -sin(time) * this.size;
+    }
+// vertical shift- columns
+let verticalShift = 0;
+if (this.gridX % 2 === 0) {
+verticalShift = cos(time * 1.1) * this.size;
+    } else {
+verticalShift = -cos(time * 1.1) * this.size;
+    }
+this.x += horizontalShift;
+this.y += verticalShift;
+  }
+display() {
+push();
+translate(this.x, this.y);
+if (shapeType === 'triangles') {
+this.drawTriangles();
+    } else if (shapeType === 'circles') {
+this.drawCircles();
+    }
+pop();
+  }
+// TRIANGLES
+drawTriangles() {
+fill(this.c);
+noStroke();
+blendMode(EXCLUSION);
+beginShape();
+if (this.type == 0) {
+vertex(this.size, 0);
+vertex(this.size, this.size);
+vertex(0, this.size);
+circle(20, this.size, 20);
+    } else if (this.type == 1) {
+vertex(this.size, 0);
+vertex(0, 0);
+vertex(0, this.size);
+circle(this.size, 10, 20);
+    } else if (this.type == 2) {
+vertex(this.size, this.size);
+vertex(0, 0);
+vertex(0, this.size);
+    } else if (this.type == 3) {
+vertex(this.size, this.size);
+vertex(0, 0);
+vertex(this.size, 0);
+    }
+endShape();
+  }
+// CIRCLES
+drawCircles() {
+stroke(this.c);
+fill(this.c);
+blendMode(EXCLUSION);
+strokeWeight(5);
+let circleType = this.type % 2;
+if (circleType == 0) {
+arc(0, 0, size, size, 0, 90);
+arc(size, size, size, size, 180, 270);
+circle(10, this.size, 5);
+    } else {
+arc(size, 0, size, size, 90, 180);
+arc(0, size, size, size, 270, 360);
+    }
+  }
+}
+</script>
+</body>
+</html> 
