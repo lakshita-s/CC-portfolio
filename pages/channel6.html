@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Channel 6</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #00212a;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Bell class
+    class Bell {
+      constructor(x, y, ringNumber) {
+        this.x = x;
+        this.y = y;
+        this.ringNumber = ringNumber;
+        this.ringDiameter = 150;
+        this.angle = 0;
+        this.isSwinging = false;
+        this.swingSpeed = 0;
+        this.isOn = false;
+      }
+      
+      display() {
+        push();
+        translate(this.x, this.y);
+        
+        // bells frame circles
+        push();
+        stroke("#523B10");
+        strokeWeight(4);
+        noFill();
+        circle(0, 0, this.ringDiameter);
+        circle(0, -58, 32);  
+        pop();
+        
+        let swing = this.getSwing();
+        rotate(swing);
+        
+        // bells
+        if (this.isOn) {
+          fill(13, 64, 13);
+        } else {
+          fill(122, 27, 27);
+        }
+      
+        noStroke();
+        circle(0, -10, 60);  
+        rect(0, 15, 60, 50);  
+        rect(0, 45, 15, 20, 20);  
+        
+        strokeWeight(6);
+        if (this.isOn) {
+          stroke(13, 64, 13);
+        } else {
+          stroke(122, 27, 27);
+        }
+        noFill();
+        line(-35, -10, 35, -10);
+        
+        pop();
+      }
+      
+      swing() {
+        if (this.isSwinging) {
+          this.angle += 0.1; 
+          
+          if (this.angle > TWO_PI) {
+            this.isSwinging = false;
+            this.angle = 0;
+          }
+        }
+      }
+      
+      getSwing() {
+        return sin(this.angle) * 0.5;
+      }
+      
+      playSound() {
+        if (bellSound && bellSound.isLoaded() && !this.hasPlayedSound) {
+          bellSound.play();
+        }
+      }
+      
+      ring() {
+        this.isSwinging = true;
+        this.angle = 0;
+      }
+    }
+
+    // Main sketch
+    let bells = [];
+    let isPlaying = false;
+    let currentEventIndex = 0;
+    let playStartTime = 0;
+    let bellSound;
+    let ping = 0;
+    let scaleFactor = 0.8; // Adjust this value
+
+    const events = [
+      // tuesday
+      { time: 0, removed: [1], added: [], still: [] },
+      { time: 1.5, removed: [], added: [1, 2, 3, 4], still: [] },
+      { time: 3, removed: [1, 3, 4], added: [], still: [2] },
+      { time: 4.5, removed: [], added: [1, 3, 4], still: [2] },
+      { time: 6, removed: [2, 3, 4], added: [], still: [] },
+      { time: 7.5, removed: [], added: [2, 3, 4], still: [1] },
+      { time: 9, removed: [1, 2, 3, 4], added: [], still: [] },
+      { time: 10.5, removed: [], added: [1, 2, 3, 4], still: [] },
+      { time: 12, removed: [2, 3, 4], added: [], still: [] },
+      { time: 13.5, removed: [1], added: [], still: [] },
+      { time: 15, removed: [], added: [1], still: [] },
+      { time: 16.5, removed: [1], added: [], still: [] },
+      { time: 18, removed: [], added: [1], still: [] },
+      
+      // wednesday
+      { time: 19.5, removed: [1], added: [], still: [] },
+      { time: 21, removed: [], added: [1], still: [] },
+      { time: 22.5, removed: [1], added: [], still: [] },
+      { time: 24, removed: [], added: [1, 2, 3, 4], still: [] },
+      { time: 25.5, removed: [1, 2, 3, 4], added: [], still: [] },
+      { time: 27, removed: [], added: [1, 2, 3, 4], still: [] },
+      { time: 28.5, removed: [2, 3, 4], added: [], still: [1] },
+      
+      // thursday
+      { time: 30, removed: [1], added: [2, 3, 4, 5, 6], still: [] },
+      { time: 31.5, removed: [2, 5, 6], added: [], still: [1, 3, 4] },
+      { time: 33, removed: [3], added: [], still: [1, 4] },
+      { time: 34.5, removed: [], added: [2, 3, 5, 6], still: [1, 4] },
+      { time: 36, removed: [1, 4], added: [2, 3, 4, 5, 6], still: [] },
+      
+      // friday
+      { time: 37.5, removed: [1, 4, 6], added: [2, 3, 4, 6], still: [] },
+      { time: 39, removed: [2, 3, 4, 6], added: [2, 3], still: [1] },
+      { time: 40.5, removed: [], added: [2, 3], still: [1] },
+      { time: 42, removed: [2, 3, 1], added: [2], still: [] },
+      { time: 43.5, removed: [2], added: [3, 4, 6, 1], still: [] },
+      { time: 45, removed: [3, 4, 6, 1], added: [1], still: [] },
+      
+      // saturday
+      { time: 46.5, removed: [1], added: [2, 3, 4], still: [] },
+      { time: 48, removed: [2, 3, 4], added: [3], still: [] },
+      { time: 49.5, removed: [], added: [3], still: [] },
+      { time: 51, removed: [3], added: [2, 3, 4], still: [] },
+      { time: 52.5, removed: [2, 3, 4], added: [1], still: [] },
+      { time: 54, removed: [], added: [1], still: [] },
+      
+      // sunday
+      { time: 55.5, removed: [1], added: [2, 3, 4, 7], still: [] },
+      { time: 57, removed: [], added: [2, 3, 7, 1], still: [] },
+      { time: 58.5, removed: [2, 3, 7], added: [1], still: [4] },
+      { time: 60, removed: [1, 4], added: [4], still: [] }
+    ];
+
+    function preload() {
+      bellSound = loadSound('../assets/BELL.mp3');
+    }
+
+    function setup() {
+      createCanvas(600 * scaleFactor, 600 * scaleFactor);
+      rectMode(CENTER);
+      userStartAudio();
+      
+      bells = [
+        new Bell(300, 300),
+        new Bell(300, 150),
+        new Bell(300, 450),
+        new Bell(170, 225),
+        new Bell(430, 225),
+        new Bell(170, 375),
+        new Bell(430, 375)
+      ];
+      isPlaying = false;
+    }
+
+    function draw() {
+      background("#BDAA8E");
+      
+      push();
+      scale(scaleFactor);
+
+    //   push();
+    //   strokeWeight(1);
+    //   fill(255);
+    //   text("Mouse: " + mouseX + ", " + mouseY, 100, 20);
+    //   pop();
+      
+      // bells frame
+      push();
+      stroke("#523B10");
+      strokeWeight(3);
+      noFill();
+      circle(300, 6, 14);    
+      circle(300, 21, 14);
+      circle(300, 36, 14);
+      circle(300, 51, 14);
+      circle(300, 66, 14);
+      
+      circle(170, 458, 15);
+      triangle(170, 467, 155, 491, 185, 491);
+      circle(430, 459, 15);
+      triangle(430, 467, 415, 491, 445, 491);
+      circle(300, 533, 15);
+      triangle(300, 541, 285, 565, 315, 565);
+      line(170, 493, 170, 508);
+      line(160, 493, 160, 508);
+      line(180, 493, 180, 508);
+      line(430, 493, 430, 508);
+      line(420, 493, 420, 508);
+      line(440, 493, 440, 508);
+      line(300, 565, 300, 580);
+      line(290, 565, 290, 580);
+      line(310, 565, 310, 580);
+      pop();
+      
+      // animation
+      if (isPlaying) {
+        let elapsed = (millis() - playStartTime) / 1000;  
+        
+        for (let event of events) {
+          if (elapsed >= event.time && elapsed < event.time + 0.5) {
+            
+            // "remove" rings
+            for (let ringNum of event.removed) {
+              let bell = bells[ringNum - 1];
+              bell.isOn = false;
+              bell.ring();
+            }
+            // "add" rings
+            for (let ringNum of event.added) {
+              let bell = bells[ringNum - 1];
+              bell.isOn = true;
+              bell.ring();
+            }
+          }
+        }
+      }
+      
+      for (let bell of bells) {
+        bell.swing();
+        bell.display();
+      }
+      
+      if (frameCount % 30 == 0 && isPlaying) {
+        bellSound.play();
+      }
+      
+      pop();
+    }
+
+    function keyPressed() {
+      if (key === ' ') {
+        if (isPlaying) {
+          isPlaying = false;
+          for (let bell of bells) {
+            bell.angle = 0;
+            bell.isSwinging = false;
+          }
+        } else {
+          isPlaying = true;
+          playStartTime = millis();
+        }
+      }
+      if (key === 'c') {
+        bellSound.play();
+      }
+    }
+  </script>
+</body>
+</html>

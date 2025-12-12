@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Channel 2</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #00212a;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    let num = 20;
+    let faceW = 250;
+    let faceH = 200;
+    let outeyeL = 75;
+    let outeyeR = 75;
+    let ineyeL = 75;
+    let ineyeR = 75;
+    let mouthSize = 100;
+    let mouthEn = 0;
+    let mouthSt = 0;
+    let noseW = 40;
+    let noseH = 30;
+    let mouthW = 50;
+    let mouthH = 30;
+    let colors = ["#558c8c", "#305f45", "#d282a6", "#ffc759", "#772E25"];
+    let faceC = colors[0];
+    let colorsB = ["#104747", "#84C7A2", "#751742", "#855800", "#C78F88"];
+    let faceB = colorsB[0];
+    let go = false;
+
+    function setup() {
+      createCanvas(500, 500);
+      angleMode(DEGREES);
+      rectMode(CENTER);
+    }
+
+    function keyPressed() {
+      if (key === 'c') {
+        go = true;
+      }
+    }
+
+    function keyReleased() {
+      if (key === 'c') {
+        go = false;
+      }
+    }
+
+    function draw() {
+      background(220);
+      face(250, 250);
+      
+      // text
+      textSize(20);
+      fill(255);
+      stroke(0);
+      strokeWeight(4);
+      text('press "c" to randomize the face', 45, 50);
+      text('drag mouse from left to right to make it happier', 45, 80);
+      
+      if (go) {
+        randFace();
+      }
+    }
+
+    function randFace() {
+      faceW = int(random(250, 450));
+      faceH = int(random(250, 450));
+      outeyeL = int(random(75, 100));
+      outeyeR = int(random(75, 100));
+      ineyeL = int(random(100, 210));
+      ineyeR = int(random(100, 210));
+      mouthSize = int(random(50, 150));
+      mouthSt = int(random(1, 45));
+      if (mouthSt < 180) {
+        mouthEn = 180 - mouthSt;
+      }
+      noseW = int(random(10, 70));
+      noseH = int(random(10, 70));
+      let pos = int(random(0, 5));
+      faceC = colors[pos];
+      
+      let posB = int(random(0, 5));
+      faceB = colorsB[pos];
+    }
+
+    function face(x, y) {
+      noStroke();
+      let c = color(random(255), random(255), random(255));
+      
+      // background
+      push();
+      rectMode(CORNER);
+      noStroke();
+      for (let i = 0; i < num; i++) {
+        let c = color(random(255), random(255), random(255));
+        fill(c);
+        rect(0, height / num * i, 1000, 200);
+      }
+      pop();
+      
+      // face (inner and outer)
+      push();
+      strokeWeight(3);
+      stroke(0, 0, 255);
+      fill(faceB);
+      ellipse(x, y, faceW + 70, faceH + 70);
+      pop();
+      
+      push();
+      fill(faceC);
+      ellipse(x, y, faceW, faceH);
+      pop();
+      
+      // eyes
+      // outer eyes
+      push();
+      fill(c);
+      rect(x - 55, y - 55, 80, 70);
+      rect(x + 55, y - 55, 80, 70);
+      pop();
+      
+      push();
+      fill("white");
+      
+      // diamond inner eyes
+      let wL = ineyeL;
+      let hL = ineyeL / 3;
+      
+      quad(
+        x - 50, y - 50 - hL,
+        x - 50 + wL, y - 50,
+        x - 50, y - 50 + hL,
+        x - 50 - wL, y - 50
+      );
+      
+      let wR = ineyeR;
+      let hR = ineyeR / 3;
+      
+      quad(
+        x + 50, y - 50 - hR,
+        x + 50 + wR, y - 50,
+        x + 50, y - 50 + hR,
+        x + 50 - wR, y - 50
+      );
+      pop();
+      
+      // center eye dot that doesn't move
+      push();
+      fill(0, 0, 255);
+      ellipse(x - 50, y - 50, 10, 10);
+      ellipse(x + 50, y - 50, 10, 10);
+      pop();
+      
+      // nose
+      push();
+      fill(faceB);
+      ellipse(x, y + 30, noseW, noseH);
+      pop();
+      
+      // mouth
+      let smile = map(mouseX, 0, width, 10, 180);
+      push();
+      stroke("white");
+      noFill();
+      strokeWeight(25);
+      arc(x, y + 65, mouthSize, mouthSize, 0, smile);
+      pop();
+    }
+  </script>
+</body>
+</html>

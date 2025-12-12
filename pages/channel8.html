@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Channel 8 - My Other Art</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #00212a;
+      font-family: "receipt-narrow", sans-serif;
+      color: #fff;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .gallery-container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 15px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 6px;
+      background: #001a23;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      aspect-ratio: 1;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 255, 255, 0.3);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Lightbox overlay */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 14px;
+      color: #8bb3c4;
+      margin-top: 20px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="gallery-container">
+    <div class="gallery-grid">
+      <div class="gallery-item" onclick="openLightbox(0)">
+        <img src="../assets/channel8imgs/catillustration.png" alt="Cat illustration">
+      </div>
+      <div class="gallery-item" onclick="openLightbox(1)">
+        <img src="../assets/channel8imgs/cyanotype.png" alt="Cyanotype">
+      </div>
+       <div class="gallery-item" onclick="openLightbox(2)">
+        <img src="../assets/channel8imgs/table.png" alt="Table">
+      </div>
+      <div class="gallery-item" onclick="openLightbox(3)">
+        <img src="../assets/channel8imgs/peacockhat2.png" alt="Peacock hat">
+      </div>
+      <div class="gallery-item" onclick="openLightbox(4)">
+        <img src="../assets/channel8imgs/rabbit.jpeg" alt="Rabbit">
+      </div>
+       <div class="gallery-item" onclick="openLightbox(5)">
+        <img src="../assets/channel8imgs/pattern.jpg" alt="Peacock artwork">
+      </div>
+     
+    </div>
+
+    <p class="note">click on any image to view it larger</p>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Enlarged artwork">
+  </div>
+
+  <script>
+    const images = [
+      "../assets/channel8imgs/catillustration.png",
+      "../assets/channel8imgs/cyanotype.png",
+      "../assets/channel8imgs/table.png",
+      "../assets/channel8imgs/peacockhat2.png",
+      "../assets/channel8imgs/rabbit.jpeg",
+      "../assets/channel8imgs/pattern.jpg"
+      
+    ];
+
+    function openLightbox(index) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = images[index];
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      lightbox.classList.remove('active');
+    }
+
+    // Close lightbox on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>

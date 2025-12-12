@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Channel 3</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #00212a;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    let genres = [
+      "deep ambient", "instrumental", "calm lo-fi", "soft classical", 
+      "minimal piano", "classical indie", "instrumental jazz", "morning jazz",
+      "slow r&b", "synth-pop", "female folk", "uplifting soul", 
+      "trendy pop", "oldies but goodies", "edm peak", "soft rock", 
+      "alt rock", "jazz rock", "acoustic blues", "shoegaze", 
+      "downtempo", "neo-classical night", "ambient night", "healing harp"
+    ];
+    
+    let hourColors = [
+      "#191970", "#4B0082", "#8A2BE2", "#9370DB", "#B0C4DE", "#FFB6C1",
+      "#FFA500", "#FFD700", "#FF1493", "#FF4500", "#228B22", "#FF8C00", 
+      "#FF00FF", "#DC143C", "#FF0000", "#CD5C5C", "#8B4513", "#A0522D",
+      "#4682B4", "#483D8B", "#6A5ACD", "#7B68EE", "#483D8B", "#191970"
+    ];
+    
+    let genreImages = [];
+    let from; 
+    let to; 
+    let s; 
+    let dec = 0;
+    let scaleFactor = 0.75; // Adjust this to make everything bigger/smaller
+    
+    function preload() {
+      for (let i = 0; i < 24; i++) {
+        genreImages[i] = loadImage('../assets/channel3imgs/genre' + i + '.png');
+      }
+    }
+    
+    function setup() {
+      createCanvas(600 * scaleFactor, 600 * scaleFactor);
+      textAlign(CENTER, CENTER);
+      from = color(51, 0, 0);
+      to = color(0, 51, 51);
+    }
+    
+    function draw() {
+      push();
+      scale(scaleFactor);
+      
+      // color changing bg
+      s = second();
+      if (s < 30) {
+        dec = map(s, 0, 30, 0, 1);
+      } 
+      if (s > 30) {
+        dec = map(s, 30, 60, 1, 0);
+      }
+      let co = lerpColor(from, to, dec);
+      background(co);
+      
+      let centerX = 300;
+      let centerY = 300;
+      let currentHour = hour();
+      
+      // hour ring
+      drawHourRing(centerX, centerY, currentHour);
+      
+      // vinyl record
+      fill(20);
+      circle(centerX, centerY, 500);
+      
+      // vinyl grooves
+      noFill();
+      strokeWeight(1);
+      stroke(80);
+      for (let r = 490; r > 50; r -= 12) {
+        circle(centerX, centerY, r);
+      }
+      
+      // rotating genre image
+      drawRotatingGenreImage(centerX, centerY, currentHour);
+      
+      // clock hand for real time
+      drawTimeHand(centerX, centerY, currentHour);
+      
+      // hovered genre
+      showHoveredGenre(centerX, centerY);
+      
+      textSize(14);
+      text("pssst! hover over the ring segments!", 123, 580);
+      
+      pop();
+    }
+    
+    function drawHourRing(cx, cy, currentHour) {
+      for (let h = 0; h < 24; h++) {
+        let startAngle = (h * TWO_PI / 24) - PI / 2;
+        let endAngle = ((h + 1) * TWO_PI / 24) - PI / 2;
+        
+        fill(hourColors[h]);
+        if (h === currentHour) {
+          stroke(255);
+          strokeWeight(3);
+        } else {
+          noStroke();
+        }
+        
+        arc(cx, cy, 600, 530, startAngle, endAngle);
+      }
+    }
+    
+    function drawTimeHand(cx, cy, currentHour) {
+      let angle = ((currentHour + minute() / 60 + second() / 3600) * TWO_PI / 24) - PI / 2;
+      
+      stroke(255);
+      strokeWeight(4);
+      line(cx, cy, 
+           cx + cos(angle) * 235, 
+           cy + sin(angle) * 235);
+      
+      // clock hand tip
+      fill(255);
+      noStroke();
+      circle(cx + cos(angle) * 235, 
+             cy + sin(angle) * 235, 8);
+    }
+    
+    function drawRotatingGenreImage(cx, cy, currentHour) {
+      push();
+      translate(cx, cy);
+      rotate(frameCount * 0.01);
+      
+      let img = genreImages[currentHour];
+      let maskGraphics = createGraphics(170, 170);
+      maskGraphics.fill(255);
+      maskGraphics.circle(85, 85, 170);
+      
+      img.mask(maskGraphics);
+      image(img, -85, -85, 170, 170);
+      
+      pop();
+      
+      // fixed white center circle
+      fill(255);
+      noStroke();
+      circle(cx, cy, 20);
+    }
+    
+    function showHoveredGenre(cx, cy) {
+      let mouseAngle = atan2(mouseY / scaleFactor - cy, mouseX / scaleFactor - cx);
+      if (mouseAngle < 0) mouseAngle += TWO_PI;
+      
+      let mouseDist = dist(mouseX / scaleFactor, mouseY / scaleFactor, cx, cy);
+      if (mouseDist >= 250 && mouseDist <= 300) {
+        let hourAngle = (mouseAngle + PI / 2) % TWO_PI;
+        let hoveredHour = floor(hourAngle / (TWO_PI / 24));
+        
+        fill(255);
+        stroke(0);
+        strokeWeight(3);
+        textSize(17);
+        text(hoveredHour + ":00 - " + genres[hoveredHour], cx, 20);
+      }
+    }
+  </script>
+</body>
+</html>

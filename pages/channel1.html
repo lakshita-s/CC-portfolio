@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Channel 1</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #00212a;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    function setup() {
+      createCanvas(400, 400);
+      rectMode(CENTER);
+      angleMode(DEGREES);
+    }
+
+    function draw() {
+      background(122, 170, 205);
+      noStroke();
+      
+      // sun + 1 cloud
+      push();
+      fill(250, 184, 76);
+      circle(291, 50, 150);
+      blendMode(OVERLAY);
+      fill(255, 255, 255);
+      ellipse(350, 90, 70, 69);
+      ellipse(380, 90, 70, 50);
+      ellipse(320, 90, 70, 50);
+      pop();
+      
+      // mountains
+      push();
+      fill(147, 137, 118);
+      triangle(50, 260, 190, 10, 450, 450);
+      fill(126, 117, 99);
+      triangle(-90, 260, 70, 10, 240, 290);
+      fill(114, 106, 90);
+      triangle(450, 260, 360, 60, 270, 260);
+      pop();
+      
+      // hills
+      strokeWeight(2.5);
+      push();
+      fill(96, 126, 78);
+      stroke(105, 139, 85);
+      for (let i = 0; i < 5; i++) {
+        let ellipseSize = 100 - i * 60;
+        ellipse(ellipseSize, 300, 400, 270);
+      }
+      pop();
+      
+      push();
+      fill(77, 101, 62);
+      stroke(96, 126, 78);
+      translate(400, 70);
+      for (let i = 0; i < 5; i++) {
+        let ellipseSize = 100 + i * 60;
+        ellipse(ellipseSize, 300, 600, 310);
+      }
+      pop();
+      
+      push();
+      stroke(77, 101, 62);
+      translate(-50, 90);
+      fill(67, 89, 54);
+      for (let i = 0; i < 5; i++) {
+        let ellipseSize = 100 - i * 60;
+        ellipse(ellipseSize, 300, 500, 300);
+      }
+      pop();
+      
+      // clouds
+      push();
+      fill(255, 255, 255);
+      ellipse(50, 50, 70, 69);
+      ellipse(80, 50, 70, 50);
+      ellipse(20, 50, 70, 50);
+      fill(231, 233, 239);
+      ellipse(120, 29, 45, 40);
+      ellipse(100, 29, 40, 30);
+      ellipse(140, 29, 40, 30);
+      pop();
+      
+      // trees
+      fill(90, 60, 40);
+      rect(80, 305, 8, 30, 20);
+      fill(178, 190, 181);
+      ellipse(80, 280, 30, 40);
+      rotate(350);
+      fill(90, 60, 40);
+      rect(80, 305, 8, 30, 20);
+      fill(178, 190, 181);
+      ellipse(80, 280, 30, 40);
+      translate(200, 30, 60);
+      fill(90, 60, 40);
+      rect(80, 305, 8, 30, 20);
+      fill(178, 190, 181);
+      ellipse(80, 280, 30, 40);
+      translate(-130, -140, 60);
+      rotate(-340);
+      fill(90, 60, 40);
+      rect(80, 305, 8, 30, 20);
+      fill(178, 190, 181);
+      ellipse(80, 280, 30, 40);
+    }
+  </script>
+</body>
+</html>

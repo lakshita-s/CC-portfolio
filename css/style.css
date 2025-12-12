@@ -1,0 +1,236 @@
+body {
+  margin: 0;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5px;
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: "receipt-narrow", sans-serif;
+  color: #fff;
+}
+
+.tv-wrapper {
+  position: relative;
+  width: 95vw;
+  max-width: 1200px;
+  
+}
+
+.tv-frame {
+  position: relative;
+  width: 100%;
+  display: block;
+  z-index: 3;
+  
+  pointer-events: none; 
+}
+
+.tv-screen {
+  position: absolute;
+  left: 12%;
+  top: 19%;
+  width: 74%;
+  height: 60%;
+  background: transparent;
+  color: #000;
+  overflow: hidden;
+  padding: 0;
+  border-radius: 0;
+  
+  z-index: 2; 
+}
+
+.tv-screen.embed-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: auto; 
+}
+
+.tv-screen.text-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #00212a;
+  border-radius: 8px; 
+}
+
+.tv-embed-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tv-embed-wrapper.full iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.tv-embed-wrapper.scaled {
+  width: 100%;     
+  height: 100%;     
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tv-embed-wrapper.scaled iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: auto;
+}
+
+.text-page {
+  background: transparent;
+  width: 63%;
+  height: 74%;
+  margin: auto;
+  padding: 22px 32px;   
+  overflow: auto;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 19px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.text-page p,
+.text-page li {
+  text-align: justify;
+}
+
+.text-content {
+  overflow: hidden;
+  white-space: normal;
+  animation: typewriter 1.8s steps(40) 1;
+}
+
+@keyframes typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.tv-bottom-text {
+  position: absolute;
+  left: 45%;
+  right: 17%;
+  bottom: 12%;
+  height: 5%;
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.3;
+  text-shadow: 0 0 2px #000;
+  font-weight: bold;
+  z-index: 3;
+}
+
+.tv-bottom-text.typing {
+  animation: fade-in 0.4s ease-in;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 
+.tv-bottom-text.typing {
+  animation: typewriter-fast 0.6s steps(40) 1;
+}
+
+@keyframes typewriter-fast {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+} */
+
+.tv-bottom-text.hidden {
+  visibility: hidden;
+}
+
+.tv-button {
+  position: absolute;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 4; 
+}
+
+.btn-onoff {
+  left: 18%;
+  bottom: 10%;
+  width: 5%;
+  height: 11%;
+}
+
+.btn-menu {
+  left: 26%;
+  bottom: 10%;
+  width: 6%;
+  height: 10%;
+}
+
+.btn-right {
+  left: 36%;
+  bottom: 14%;
+  width: 6%;
+  height: 10%;
+}
+
+.btn-left {
+  left: 36%;
+  bottom: 6%;
+  width: 6%;
+  height: 7%;
+}
+
+.btn-star {
+  left: 10%;
+  top: 23%;
+  width: 5%;
+  height: 15%;
+}
+
+.tv-embed-wrapper.game {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.tv-embed-wrapper.game iframe {
+  width: 600px; 
+  height: 500px; 
+  border: none;
+  transform: scale(0.9); 
+  transform-origin: center center;
+}
+
+.text-page.about-page {
+  padding-top: 2px; 
+}

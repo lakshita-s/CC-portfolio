@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Channel 4</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #00212a;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    let tongueVisible = true;
+    let creepyEyes = false;
+    let spiralAngle = 0;
+    let img;
+    let spiralImg;
+    let leftpecflexin = 0;
+    let rightpecflexin = 0;
+    let pecflexup = 0;
+    let buttshake = 0;
+    let scaleFactor = 0.5; // Adjust this to make it smaller/bigger
+
+    function preload() {
+      img = loadImage('../assets/WitchHatDesign.png');
+      spiralImg = loadImage('../assets/spiral.png');
+    }
+
+    function setup() {
+      createCanvas(500 * scaleFactor, 900 * scaleFactor);
+      background(220);
+      rectMode(CENTER);
+    }
+
+    function draw() {
+      background(220);
+      
+      push();
+      scale(scaleFactor);
+      noStroke();
+      
+      chest();  
+      sexylegs();
+      head();
+      
+      textSize(15);
+      fill(0);
+      textStyle(BOLD);
+      text('press "c" and "t" for a surprise!', 140, 335);
+      text('hi im buff cat monster!', 40, 35);
+      
+      pop();
+    }
+
+    function sexylegs() {
+      push();
+      fill("#660033");
+      rectMode(CORNER);
+      rect(170, 600, 160, 150);
+      rectMode(CENTER);
+      fill("green");
+      stroke(0, 79, 21);
+      strokeWeight(4);
+      rect(250, 800, 140, 240);
+      push();
+      fill(220);
+      arc(170, 900, 100, 350, 3 * PI / 2, 0);
+      arc(330, 900, 100, 350, PI, 3 * PI / 2);
+      pop();
+      push();
+      fill("green");
+      ellipse(175, 675 + buttshake, 150, 150);
+      ellipse(325, 675 + buttshake, 150, 150);
+      pop();
+      rect(250, 800, 0, 235);
+      rectMode(CORNER);
+      fill("green");
+      rect(100, 865, 150, 35, 10, 0, 0, 0);
+      rect(250, 865, 150, 35, 0, 10, 0, 0);
+      rectMode(CENTER);
+      rect(100, 865, 10, 10, 10);
+      rect(100, 875, 10, 10, 10);
+      rect(100, 885, 10, 10, 10);
+      rect(100, 895, 10, 10, 10);
+      rect(400, 865, 10, 10, 10);
+      rect(400, 875, 10, 10, 10);
+      rect(400, 885, 10, 10, 10);
+      rect(400, 895, 10, 10, 10);
+      pop();
+    }
+
+    function chest() {
+      // torso
+      push();
+      fill(255, 232, 207);
+      rect(250, 500, 205, 200);
+      strokeWeight(5);
+      stroke(156, 129, 101);
+      fill(220);
+      arc(145, 600, 50, 321, 3 * PI / 2, 0);
+      arc(355, 600, 50, 321, PI, 3 * PI / 2);
+      rect(250, 540, 0, 100);
+      rect(250, 523, 50, 0);
+      rect(250, 557, 50, 0);
+      noFill();
+      arc(275, 600, 50, 250, 3 * PI / 2, 0);
+      arc(225, 600, 50, 250, PI, 3 * PI / 2);
+      pop();
+      
+      // arms
+      push();
+      fill(255, 232, 207);
+      strokeWeight(5);
+      stroke(156, 129, 101);
+      ellipse(109, 440, 70, 140);
+      arc(115, 380, 100, 120, 3 * PI / 4, PI / 8);
+      arc(109, 502, 50, 150, 2 * PI - 1 / 2, PI + 1 / 2);
+      ellipse(90, 570, 60, 30);
+      pop();
+      
+      push();
+      fill(255, 232, 207);
+      strokeWeight(5);
+      stroke(156, 129, 101);
+      ellipse(391, 440, 70, 140);
+      arc(385, 380, 100, 120, -3 * PI / 4, PI / 8 + 0.4);
+      arc(391, 502, 50, 150, 2 * PI - 1 / 2, PI + 1 / 2);
+      ellipse(410, 570, 60, 30);
+      pop();
+      
+      // neck
+      push();
+      fill(255, 232, 207);
+      rect(250, 325, 260, 100);
+      fill(220);
+      strokeWeight(5);
+      stroke(156, 129, 101);
+      arc(120, 270, 130, 100, 0, PI / 2);
+      arc(380, 270, 130, 100, PI / 2, PI);
+      pop();
+      
+      // chest and abs
+      push();
+      fill(255, 232, 207);
+      strokeWeight(5);
+      stroke(156, 129, 101);
+      rect(180 + leftpecflexin, 390 + pecflexup, 125, 100, 10, 0, 10, 40);
+      rect(320 + rightpecflexin, 390 + pecflexup, 125, 100, 0, 10, 40, 10);
+      pop();
+      push();
+      fill(255, 232, 207);
+      rect(250, 370, 230, 95);
+      pop();
+      push();
+      fill(156, 129, 101);
+      ellipse(148 + leftpecflexin, 425 + pecflexup, 15, 10);
+      ellipse(352 + rightpecflexin, 425 + pecflexup, 15, 10);
+      pop();
+    }
+
+    function head() {
+      // HEAD 
+      push();
+      stroke("#660033");
+      strokeWeight(15);
+      strokeJoin(ROUND);
+      fill("#FF6347");
+      triangle(340, 125, 290, 90, 350, 50);
+      pop();
+      
+      push();
+      stroke("#660033");
+      strokeWeight(15);
+      strokeJoin(ROUND);
+      fill("#FF6347");
+      triangle(160, 125, 210, 90, 150, 50);
+      pop();
+      
+      // cat head shape
+      push();
+      fill("#660033");
+      ellipse(250, 185, 230);
+      pop();
+      
+      // diamond
+      push();
+      fill("#FF6347");
+      noStroke();
+      quad(250, 90, 235, 115, 250, 140, 265, 115);
+      pop();
+      
+      // eyes
+      if (creepyEyes) {
+        spiralAngle += 0.05;
+        
+        // left eye
+        push();
+        translate(195, 155);
+        rotate(15);
+        fill(0);
+        ellipse(0, 0, 40, 50);
+        rotate(spiralAngle);
+        imageMode(CENTER);
+        image(spiralImg, 0, 0, 30, 30);
+        pop();
+        
+        // right eye
+        push();
+        translate(305, 155);
+        rotate(-15);    
+        fill(0);
+        ellipse(0, 0, 40, 50);
+        rotate(spiralAngle);
+        imageMode(CENTER);
+        image(spiralImg, 0, 0, 30, 30);
+        pop();
+      } else {
+        // normal eyes
+        push();
+        stroke(0);
+        strokeWeight(2);
+        fill(255);
+        translate(195, 155);
+        rotate(15);
+        ellipse(0, 0, 40, 50);
+        pop();
+        
+        push();
+        stroke(0);
+        strokeWeight(2);
+        fill(255);
+        translate(305, 155);
+        rotate(-15);
+        ellipse(0, 0, 40, 50);
+        pop();
+        
+        // pupils
+        push();
+        fill(0);
+        translate(195, 155);
+        rotate(-28);
+        ellipse(0, 0, 18, 35);
+        pop();
+        
+        push();
+        fill(0);
+        translate(305, 155);
+        rotate(28);
+        ellipse(0, 0, 18, 35);
+        pop();
+        
+        push();
+        fill(255);
+        rect(195, 155, 9);
+        rect(305, 155, 9);
+        pop();
+      }
+      
+      // face
+      push();
+      fill("#FF6347");
+      noStroke();
+      ellipse(250, 230, 80);
+      ellipse(243, 240, 80);
+      ellipse(257, 240, 80);
+      pop();
+      
+      push();
+      stroke('#660033');
+      strokeWeight(20);
+      strokeJoin(ROUND);
+      fill('#660033');
+      triangle(250, 210, 248, 215, 252, 215);
+      pop();
+      
+      // tongue 
+      if (tongueVisible) {
+        push();
+        stroke("#660033");
+        strokeWeight(2);
+        fill("red");
+        arc(250, 252, 20, 30, 0, PI);
+        pop();
+      }
+      
+      // mouth
+      push();
+      stroke(0);
+      strokeWeight(4);
+      fill('#FF6347');
+      arc(242, 245, 16, 16, 0, PI);
+      arc(258, 245, 16, 16, 0, PI);
+      pop();
+      
+      // whiskers
+      push();
+      stroke(0);
+      strokeWeight(2);
+      noFill();
+      line(180, 210, 100, 195);
+      line(180, 215, 100, 220);
+      line(180, 220, 100, 235);
+      line(320, 210, 400, 195);
+      line(320, 215, 400, 220);
+      line(320, 220, 400, 235);
+      pop();
+      
+      // witch hat
+      push();
+      imageMode(CENTER);
+      image(img, 250, 50, 90, 100); 
+      pop();
+    }
+
+    function keyPressed() {
+      if (key === 't' || key === 'T') {
+        tongueVisible = !tongueVisible;
+        leftpecflexin = 5;
+        rightpecflexin = -5;
+        pecflexup = -5;
+      }
+      if (key === 'c' || key === 'C') {
+        creepyEyes = !creepyEyes;
+        buttshake = -10;
+      }
+    }
+
+    function keyReleased() {
+      if (key === 't' || key === 'T') {
+        leftpecflexin = 0;
+        rightpecflexin = 0;
+        pecflexup = 0;
+      }
+      if (key === 'c' || key === 'C') {
+        buttshake = 0;
+      }
+    }
+  </script>
+</body>
+</html>
